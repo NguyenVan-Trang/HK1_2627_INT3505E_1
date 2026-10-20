@@ -105,3 +105,54 @@ Status code trả về:
 ![code-cursor](code-cursor.png)
 Kết quả:
 ![cursor](test-cursor.png)
+
+# BTVN SỐ 2: HOÀN THIỆN list_books Ở LAB 1: implement cả offset và cursor (chọn qua param ?strategy=... ) + thêm filter ?genre + sort multi-key.
+
+## 1. Phân trang Offset với 3 bản ghi mỗi trang:
+Status code trả về:
+![code-offset-1](code-offset-1.png)
+
+Kết quả
+![offset](offset.png)
+
+## 2. Phân trang cursor:
+Status code trả về:
+![code-cursor-paging-1](code-cursor-paging-1.png)
+![code-cursor-paging-2](code-cursor-paging-2.png)
+
+Kết quả:
+![cursor-paging-1](cursor-paging-1.png)
+![cursor-paging-2](cursor-paging-2.png)
+
+## 3. Sắp xếp nhiều trường:
+Status code trả về:
+![code-sort-with-many-fields](code-sort-with-many-fields-hw2.png)
+Kết quả:
+![sort-with-many-fields-1](sort-with-many-fields-1.png)
+![sort-with-many-fields-2](sort-with-many-fields-2.png)
+![sort-with-many-fields-3](sort-with-many-fields-3.png)
+
+## 4. Strategy không hợp lệ:
+Status code trả về:
+![code-invalid-strategy](code-invalid-strategy.png)
+Kết quả:
+![invalid-strategy](invalid-strategy.png)
+
+## 5. Limit vượt giới hạn:
+Status code trả về:
+![code-bad-limit](code-bad-limit.png)
+Kết quả:
+![bad-limit](bad-limit.png)
+
+## 6. Kiểm tra cursor ràng buộc với bộ lọc và sắp xếp
+Kiểm tra cursor với sort khác nhau:
+Status code trả về:
+![code-test-cursor-with-sort](code-test-cursor-with-sort.png)
+Kết quả:
+![test-cursor-with-sort](test-cursor-with-sort.png)
+
+Kiểm tra cursor với genre khác:
+Status code trả về:
+![code-test-cursor-with-genre](code-test-cursor-with-genre.png)
+Kết quả:
+![test-cursor-with-genre](test-cursor-with-genre.png)

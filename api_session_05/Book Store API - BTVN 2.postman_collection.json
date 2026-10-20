@@ -1,0 +1,204 @@
+{
+  "info": {
+    "_postman_id": "d75d1e7f-6510-465f-903a-55ad4230331f",
+    "name": "Book Store API - BTVN 2",
+    "description": "Kiểm thử offset pagination, cursor pagination, genre filter, multi-key sorting và xử lý tham số không hợp lệ.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "50146413",
+    "_collection_link": "https://go.postman.co/collection/50146413-d75d1e7f-6510-465f-903a-55ad4230331f?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "1. Offset Pagination",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/v1/books?strategy=offset&limit=5&offset=0",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "books"
+          ],
+          "query": [
+            {
+              "key": "strategy",
+              "value": "offset"
+            },
+            {
+              "key": "limit",
+              "value": "5"
+            },
+            {
+              "key": "offset",
+              "value": "0"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2. Cursor Pagination",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/v1/books?strategy=cursor&limit=5",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "books"
+          ],
+          "query": [
+            {
+              "key": "strategy",
+              "value": "cursor"
+            },
+            {
+              "key": "limit",
+              "value": "5"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "3. Filter by Genre",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/v1/books?genre=programming",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "books"
+          ],
+          "query": [
+            {
+              "key": "genre",
+              "value": "programming"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "4. Multi-key Sorting",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/v1/books?sort=-price,title",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "books"
+          ],
+          "query": [
+            {
+              "key": "sort",
+              "value": "-price,title"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "5. Invalid Strategy",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/v1/books?strategy=invalid",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "books"
+          ],
+          "query": [
+            {
+              "key": "strategy",
+              "value": "invalid"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "6. Invalid Limit",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/v1/books?limit=200",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "v1",
+            "books"
+          ],
+          "query": [
+            {
+              "key": "limit",
+              "value": "200"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
