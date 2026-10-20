@@ -1,9 +1,10 @@
 
 from flask import Blueprint, request, jsonify
-from sqlalchemy import select
+from sqlalchemy import select, tuple_
 from jsonschema import validate, ValidationError
 import json
 import os
+import base64
 
 from models import db, Book, Author, Category
 
@@ -34,22 +35,139 @@ def validate_book(payload):
 def find_book(book_id):
     return db.session.get(Book, book_id)
 
+# Bat dau Lab 2: parse_sort va filter
+SORT_FIELDS = {
+    "id": Book.id,
+    "price": Book.price_vnd,
+}
+
+
+def parse_sort(raw):
+    desc = raw.startswith("-")
+    key = raw[1:] if desc else raw
+    key = key.strip()
+
+    if key not in SORT_FIELDS:
+        return None, None, None
+
+    p = SORT_FIELDS[key]
+    cols = [
+        p.desc() if desc else p.asc(),
+        Book.id.desc() if desc else Book.id.asc(),
+    ]
+
+    return p, cols, desc
+
+
+def _encode_cursor(payload):
+    raw = json.dumps(payload, separators=(",", ":")).encode("utf-8")
+    return base64.urlsafe_b64encode(raw).decode("ascii").rstrip("=")
+
+
+def apply_cursor(q, raw, sort, p, desc):
+    if not raw:
+        return q, None, 200
+
+    try:
+        padding = "=" * (-len(raw) % 4)
+        payload = json.loads(
+            base64.urlsafe_b64decode(raw + padding).decode("utf-8")
+        )
+
+        if not isinstance(payload, dict):
+            raise ValueError("Cursor must be a JSON object")
+
+        if payload.get("s") != sort:
+            return None, "sort_chg", 400
+
+        value = payload["v"]
+        book_id = payload["i"]
+
+        if type(book_id) is not int or book_id <= 0:
+            raise ValueError("Invalid cursor id")
+
+        if type(value) is not int:
+            raise ValueError("Invalid cursor value")
+
+        # ID sort dùng chính ID làm giá trị sort.
+        # Với price sort, value là price_vnd.
+        if sort == "id" and value != book_id:
+            raise ValueError("Invalid cursor value")
+
+        op = "<" if desc else ">"
+        condition = tuple_(p, Book.id).op(op)((value, book_id))
+
+        return q.where(condition), None, 200
+
+    except (ValueError, TypeError, KeyError, UnicodeDecodeError):
+        return None, "bad_cursor", 400
+
+
+def build_response(items, limit, sort, p, more):
+    nxt = None
+
+    if items and more:
+        last = items[-1]
+        nxt = _encode_cursor({
+            "s": sort,
+            "v": getattr(last, p.key),
+            "i": last.id,
+        })
+
+    return jsonify({
+        "data": [book.to_dict() for book in items],
+        "page": {
+            "next": nxt,
+            "more": more,
+        },
+    })
+# End Lab 2
 
 # GET /api/v1/books
 @bp.get("")
 def list_books():
+    raw = request.args.get("cursor")
+    sort = request.args.get("sort", "-id")
+    limit = min(request.args.get("limit", 20, type=int), 100)
     category_id = request.args.get("category", type=int)
 
-    query = select(Book).order_by(Book.id.asc())
+    # Kiểm tra limit
+    if limit < 1:
+        return jsonify({
+            "error": "invalid_limit",
+            "message": "limit must be between 1 and 100"
+        }), 400
+
+    # Parse sort theo whitelist
+    p, cols, desc = parse_sort(sort)
+
+    if p is None:
+        return jsonify({
+            "error": "bad_sort",
+            "message": "Supported sort values: id, -id, price, -price"
+        }), 400
+
+    # Tạo query và áp dụng filter
+    q = select(Book)
 
     if category_id is not None:
-        query = query.where(Book.category_id == category_id)
+        q = q.where(Book.category_id == category_id)
 
-    books = db.session.scalars(query).all()
+    q = q.order_by(*cols)
 
-    return jsonify({
-        "data": [book.to_dict() for book in books]
-    })
+    # Áp dụng cursor
+    q, err, code = apply_cursor(q, raw, sort, p, desc)
+
+    if err:
+        return jsonify({"error": err}), code
+
+    # Lấy thêm một bản ghi để xác định còn trang sau không
+    rows = db.session.scalars(q.limit(limit + 1)).all()
+    more = len(rows) > limit
+    items = rows[:limit]
+
+    return build_response(items, limit, sort, p, more)
+
 
 
 # POST /api/v1/books
