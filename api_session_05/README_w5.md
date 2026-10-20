@@ -156,3 +156,11 @@ Status code trả về:
 ![code-test-cursor-with-genre](code-test-cursor-with-genre.png)
 Kết quả:
 ![test-cursor-with-genre](test-cursor-with-genre.png)
+
+## 7. Kết quả với Postman:
+![postman-1](postman-1.png)
+![postman-2](postman-2.png)
+![postman-3](postman-3.png)
+![postman-4](postman-4.png)
+![postman-5](postman-5.png)
+![postman-6](postman-6.png)
