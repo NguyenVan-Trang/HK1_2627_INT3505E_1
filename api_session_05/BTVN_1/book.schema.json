@@ -1,0 +1,46 @@
+
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Book",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "isbn": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 17
+    },
+    "publisher": {
+      "type": "string",
+      "minLength": 1
+    },
+    "publication_year": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "available_copies": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "author_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "title",
+    "isbn",
+    "publisher",
+    "publication_year",
+    "available_copies",
+    "author_ids"
+  ],
+  "additionalProperties": false
+}

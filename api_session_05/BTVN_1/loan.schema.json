@@ -1,0 +1,31 @@
+
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Loan",
+  "type": "object",
+  "properties": {
+    "book_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "member_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "borrowed_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "due_at": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "required": [
+    "book_id",
+    "member_id",
+    "borrowed_at",
+    "due_at"
+  ],
+  "additionalProperties": false
+}
