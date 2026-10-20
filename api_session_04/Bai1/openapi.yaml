@@ -1,0 +1,367 @@
+openapi: 3.0.3
+
+info:
+  title: Tasks API
+  version: 1.0.0
+  description: Quản lý task nội bộ
+
+servers:
+  - url: http://localhost:5000/v1
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: tasks
+    description: Quản lý task
+
+paths:
+
+  /tasks:
+    get:
+      tags:
+        - tasks
+      operationId: listTasks
+      summary: Danh sách task
+      parameters:
+        - $ref: '#/components/parameters/PageLimit'
+        - $ref: '#/components/parameters/StatusFilter'
+      responses:
+        '200':
+          description: Danh sách task
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskPage'
+              example:
+                data:
+                  - id: 550e8400-e29b-41d4-a716-446655440000
+                    title: Hoàn thành API Specification
+                    status: open
+                    priority: high
+                    dueDate: 2026-10-15
+                    assigneeId: user-001
+                  - id: 6ba7b810-9dad-11d1-80b4-00c04fd430c8
+                    title: Kiểm tra Swagger Editor
+                    status: done
+                    priority: normal
+                    dueDate: 2026-10-10
+                    assigneeId: user-002
+                limit: 20
+                total: 2
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      tags:
+        - tasks
+      operationId: createTask
+      summary: Tạo task mới
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTaskInput'
+            example:
+              title: Hoàn thành bài tập Swagger
+              status: open
+              priority: high
+              dueDate: 2026-10-20
+              assigneeId: user-001
+      responses:
+        '201':
+          description: Tạo task thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+              example:
+                id: 550e8400-e29b-41d4-a716-446655440000
+                title: Hoàn thành bài tập Swagger
+                status: open
+                priority: high
+                dueDate: 2026-10-20
+                assigneeId: user-001
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+  /tasks/{taskId}:
+
+    parameters:
+      - name: taskId
+        in: path
+        required: true
+        description: ID của task
+        schema:
+          type: string
+          format: uuid
+        example: 550e8400-e29b-41d4-a716-446655440000
+
+    get:
+      tags:
+        - tasks
+      operationId: getTaskById
+      summary: Lấy task theo ID
+      responses:
+        '200':
+          description: Task
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+              example:
+                id: 550e8400-e29b-41d4-a716-446655440000
+                title: Hoàn thành API Specification
+                status: open
+                priority: high
+                dueDate: 2026-10-15
+                assigneeId: user-001
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    patch:
+      tags:
+        - tasks
+      operationId: patchTask
+      summary: Cập nhật một phần task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTaskInput'
+            example:
+              status: done
+              priority: normal
+      responses:
+        '200':
+          description: Cập nhật task thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+              example:
+                id: 550e8400-e29b-41d4-a716-446655440000
+                title: Hoàn thành API Specification
+                status: done
+                priority: normal
+                dueDate: 2026-10-15
+                assigneeId: user-001
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+    delete:
+      tags:
+        - tasks
+      operationId: deleteTask
+      summary: Xóa task
+      responses:
+        '204':
+          description: Xóa thành công, không có response body
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+
+components:
+
+  schemas:
+
+    Task:
+      type: object
+      required:
+        - id
+        - title
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 550e8400-e29b-41d4-a716-446655440000
+
+        title:
+          type: string
+          minLength: 1
+          example: Hoàn thành API Specification
+
+        status:
+          type: string
+          enum:
+            - open
+            - done
+          default: open
+          example: open
+
+        priority:
+          type: string
+          enum:
+            - low
+            - normal
+            - high
+          default: normal
+          example: high
+
+        dueDate:
+          type: string
+          format: date
+          example: 2026-10-15
+
+        assigneeId:
+          type: string
+          example: user-001
+
+    CreateTaskInput:
+      type: object
+      required:
+        - title
+      properties:
+        title:
+          type: string
+          minLength: 1
+          example: Hoàn thành bài tập Swagger
+
+        status:
+          type: string
+          enum:
+            - open
+            - done
+          default: open
+          example: open
+
+        priority:
+          type: string
+          enum:
+            - low
+            - normal
+            - high
+          default: normal
+          example: high
+
+        dueDate:
+          type: string
+          format: date
+          example: 2026-10-20
+
+        assigneeId:
+          type: string
+          example: user-001
+
+    UpdateTaskInput:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          example: Hoàn thành bài tập Swagger
+
+        status:
+          type: string
+          enum:
+            - open
+            - done
+          example: done
+
+        priority:
+          type: string
+          enum:
+            - low
+            - normal
+            - high
+          example: normal
+
+        dueDate:
+          type: string
+          format: date
+          example: 2026-10-20
+
+        assigneeId:
+          type: string
+          example: user-002
+
+    TaskPage:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+        limit:
+          type: integer
+          example: 20
+        total:
+          type: integer
+          example: 2
+
+    Error:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 422
+        title:
+          type: string
+          example: Validation Error
+        detail:
+          type: string
+          example: Dữ liệu task không hợp lệ
+
+  parameters:
+
+    PageLimit:
+      name: limit
+      in: query
+      required: false
+      description: Số task tối đa trả về
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+      example: 20
+
+    StatusFilter:
+      name: status
+      in: query
+      required: false
+      description: Lọc task theo trạng thái
+      schema:
+        type: string
+        enum:
+          - open
+          - done
+      example: open
+
+  responses:
+
+    Unauthorized:
+      description: Chưa xác thực
+
+    NotFound:
+      description: Không tìm thấy task
+
+    ValidationError:
+      description: Dữ liệu không hợp lệ
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: 422
+            title: Validation Error
+            detail: Dữ liệu task không hợp lệ
+
+  securitySchemes:
+
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
