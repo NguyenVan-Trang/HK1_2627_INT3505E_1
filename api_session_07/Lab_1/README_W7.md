@@ -108,3 +108,14 @@ Dữ liệu hiện có:
 Dừng + khởi động lại container, kiểm tra lại dữ liệu:
 
 ![test-save-data-docker-2](images/test-save-data-docker-2.png)
+
+
+# TEST Healthz và Ready:
+
+Healthz:
+
+![test-healthz](images/test-healthz.png)
+
+Ready:
+
+![test-ready](images/test-ready.png)
