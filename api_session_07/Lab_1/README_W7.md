@@ -119,3 +119,6 @@ Healthz:
 Ready:
 
 ![test-ready](images/test-ready.png)
+
+# PYTEST cho 1 Endpoint POST và 1 endpoint GET có eager loading:
+![pytest](images/pytest.png)

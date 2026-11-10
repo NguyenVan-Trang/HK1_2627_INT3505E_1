@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from sqlalchemy import func
+from sqlalchemy.orm import selectinload
 
 from ..extensions import db
 from ..models import Order, OrderItem, Product
@@ -46,7 +46,9 @@ def create_order():
 @orders_bp.get("")
 def list_orders():
     orders = db.session.execute(
-        db.select(Order).order_by(Order.id)
+        db.select(Order)
+        .options(selectinload(Order.items))
+        .order_by(Order.id)
     ).scalars().all()
 
     return jsonify(OrderOut(many=True).dump(orders)), 200
@@ -54,7 +56,11 @@ def list_orders():
 
 @orders_bp.get("/<int:id>")
 def get_order(id):
-    order = db.session.get(Order, id)
+    order = db.session.execute(
+        db.select(Order)
+        .options(selectinload(Order.items))
+        .where(Order.id == id)
+    ).scalar_one_or_none()
 
     if order is None:
         raise NotFound(f"Order with id {id} not found")
