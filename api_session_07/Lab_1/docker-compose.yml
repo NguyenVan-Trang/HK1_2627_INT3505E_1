@@ -1,0 +1,15 @@
+
+services:
+  product-api:
+    build: .
+    container_name: product-api
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    volumes:
+      - app_data:/app/instance
+    restart: unless-stopped
+
+volumes:
+  app_data:

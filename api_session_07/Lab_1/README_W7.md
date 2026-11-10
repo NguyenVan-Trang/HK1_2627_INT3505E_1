@@ -93,3 +93,18 @@ PATCH:
 ## 8. Xoá sản phẩm:
 ![delete](images/delete.png)
 
+
+# TEST DOCKER:
+
+## 1. Kiểm thử API trong Docker:
+![test-api-docker-1](images/test-api-docker-1.png)
+![test-api-docker-2](images/test-api-docker-2.png)
+
+## 2. Kiểm thử khả năng lưu dữ liệu:
+Dữ liệu hiện có:
+
+![test-save-data-docker-1](images/test-save-data-docker-1.png)
+
+Dừng + khởi động lại container, kiểm tra lại dữ liệu:
+
+![test-save-data-docker-2](images/test-save-data-docker-2.png)
