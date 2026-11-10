@@ -61,3 +61,8 @@ class Product(db.Model):
         server_default=func.now(),
         nullable=False
     )
+
+    order_items = db.relationship(
+    "OrderItem",
+    back_populates="product"
+)

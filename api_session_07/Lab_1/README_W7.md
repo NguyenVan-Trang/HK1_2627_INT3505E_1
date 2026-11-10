@@ -43,3 +43,53 @@ PATCH:
 ## 8. Xoá sản phẩm:
 ![delete](images/delete.png)
 
+
+# TEST ENDPOINT với resource OderItems, Order:
+
+## 1. Lấy danh sách đơn hàng:
+![get-order](images/get-order.png)
+
+## 2. Lấy đơn hàng theo ID:
+![get-order-by-id](images/get-order-by-id.png)
+
+## 3. Tạo đơn hàng:
+![create-order](images/create-order.png)
+
+## 4. Tạo đơn hàng với ID không tồn tại/Lấy thông tin đơn hàng với ID không tồn tại:
+POST:
+
+![create-order-with-invalid-id](images/create-order-with-invalid-id.png)
+
+GET:
+
+![get-order-with-invalid-id](images/get-order-with-invalid-id.png)
+
+## 5. Thêm sản phẩm mới vào đơn hàng:
+![add-product-to-order](images/add-product-to-order.png)
+
+## 6. Tạo đơn hàng với số lượng bằng 0, sản phẩm trống, không có số lượng:
+POST với qty = 0:
+
+![post-with-zero-qty](images/post-with-zero-qty.png)
+
+POST với sản phẩm trống:
+
+![post-with-empty-item](images/post-with-empty-item.png)
+
+POST không có qty:
+
+![post-missing-qty](images/post-missing-qty.png)
+
+## 7. POST/PATCH sản phẩm giá âm:
+POST:
+
+![post-with-negative-price](images/post-with-negative-price.png)
+
+
+PATCH:
+
+![patch-with-negative-price](images/patch-with-negative-price.png)
+
+## 8. Xoá sản phẩm:
+![delete](images/delete.png)
+

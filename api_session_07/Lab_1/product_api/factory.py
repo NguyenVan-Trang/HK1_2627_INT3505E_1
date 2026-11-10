@@ -1,10 +1,11 @@
 
-from flask import Flask
+from flask import Flask, app
 
 from .config import DefaultConfig
 from .extensions import db, migrate
 from .api.errors import register_error_handlers
 from .api.products import products_bp
+from .api.orders import orders_bp
 
 
 def create_app(config=None):
@@ -18,5 +19,6 @@ def create_app(config=None):
     register_error_handlers(app)
     
     app.register_blueprint(products_bp)
+    app.register_blueprint(orders_bp)
     
     return app
