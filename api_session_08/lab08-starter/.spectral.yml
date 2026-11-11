@@ -1,0 +1,41 @@
+
+extends:
+  - spectral:oas
+
+rules:
+  response-200-must-have-properties:
+    description: Every HTTP 200 response must have a non-empty object schema
+    message: Response 200 object schema must contain at least one property
+    severity: error
+    given: "$.paths[*][*].responses['200'].content.*.schema"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          oneOf:
+            - type: object
+              required:
+                - properties
+              properties:
+                properties:
+                  type: object
+                  minProperties: 1
+            - type: array
+              required:
+                - items
+              properties:
+                items:
+                  oneOf:
+                    - type: object
+                      required:
+                        - properties
+                      properties:
+                        properties:
+                          type: object
+                          minProperties: 1
+                    - type: object
+                      required:
+                        - $ref
+                      properties:
+                        $ref:
+                          type: string
