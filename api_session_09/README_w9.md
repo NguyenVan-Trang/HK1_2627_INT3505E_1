@@ -57,4 +57,33 @@ Sau ngày Sunset:
 
 ![after-sunset](images/after-sunset.png)
 
+# PRACTICE 4:
 
+## 1. Chạy server:
+![server-w9-p4](images/server-w9-p4.png)
+
+## 2. Test Cohort beta:
+
+![cohort-beta](images/cohort-beta.png)
+
+## 3. Test Account trong allow-list:
+
+![account-allow-list](images/account-allow-list.png)
+
+## 4. Test Account thông thường - hash bucket 5%:
+
+Với Rollout 5%:
+
+![normal-account](images/normal-account.png)
+
+Với Rollout 100%:
+
+![rollout-100-per](images/rollout-100-per.png)
+
+## 5. Test Sunset:
+
+![sunset-p4](images/sunset-p4.png)
+
+## 6. Test routing khi v1 đến Sunset:
+
+![routing](images/routing.png)
