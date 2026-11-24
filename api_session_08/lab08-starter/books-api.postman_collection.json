@@ -1,7 +1,8 @@
+
 {
   "info": {
-    "name": "Books API — Lab08 Starter",
-    "description": "Lab 3: add error-cases/ folder with POST missing title and GET missing id. Collection currently contains happy paths only.",
+    "name": "Books API - Lab 08",
+    "description": "Lab 3 - Newman runnable collection",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -9,176 +10,144 @@
       "name": "books",
       "item": [
         {
-          "name": "GET /books — initial list",
+          "name": "GET /books",
           "request": {
             "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/books",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "books"
+            "url": "{{base_url}}/books"
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                "pm.test('Body is array', () => pm.expect(pm.response.json()).to.be.an('array'));"
               ]
             }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"200 OK\", () => pm.response.to.have.status(200));",
-                  "pm.test(\"body is array\", () => pm.expect(pm.response.json()).to.be.an(\"array\"));"
-                ]
-              }
-            }
-          ]
+          }]
         },
         {
-          "name": "POST /books — create",
+          "name": "POST /books - create",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/books",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "books"
-              ]
-            },
+            "header": [{"key": "Content-Type", "value": "application/json"}],
             "body": {
               "mode": "raw",
-              "raw": "{\"title\": \"DDIA\", \"author\": \"Kleppmann\", \"year\": 2017}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
+              "raw": "{\"title\":\"DDIA\",\"author\":\"Kleppmann\",\"year\":2017}"
+            },
+            "url": "{{base_url}}/books"
           },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"201 Created\", () => pm.response.to.have.status(201));",
-                  "pm.test(\"positive id\", () => pm.expect(pm.response.json().id).to.be.above(0));",
-                  "if (pm.response.code === 201) pm.collectionVariables.set(\"book_id\", pm.response.json().id);"
-                ]
-              }
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                "pm.test('Created book has valid id', () => pm.expect(pm.response.json().id).to.be.above(0));",
+                "if (pm.response.code === 201) pm.collectionVariables.set('book_id', pm.response.json().id);"
+              ]
             }
-          ]
+          }]
         },
         {
-          "name": "GET /books/{id} — read",
+          "name": "GET /books/{id}",
           "request": {
             "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/books/{{book_id}}",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "books",
-                "{{book_id}}"
+            "url": "{{base_url}}/books/{{book_id}}"
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                "pm.test('Book has required fields', () => pm.expect(pm.response.json()).to.have.all.keys('id','title','author','year','isbn'));"
               ]
             }
-          },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"200 OK\", () => pm.response.to.have.status(200));",
-                  "pm.test(\"expected fields\", () => pm.expect(pm.response.json()).to.have.all.keys(\"id\", \"title\", \"author\", \"year\", \"isbn\"));"
-                ]
-              }
-            }
-          ]
+          }]
         },
         {
-          "name": "PUT /books/{id} — replace",
+          "name": "PUT /books/{id}",
           "request": {
             "method": "PUT",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/books/{{book_id}}",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "books",
-                "{{book_id}}"
-              ]
-            },
+            "header": [{"key": "Content-Type", "value": "application/json"}],
             "body": {
               "mode": "raw",
-              "raw": "{\"title\": \"DDIA revised\", \"author\": \"Kleppmann\", \"year\": 2017}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
+              "raw": "{\"title\":\"DDIA revised\",\"author\":\"Kleppmann\",\"year\":2017}"
+            },
+            "url": "{{base_url}}/books/{{book_id}}"
           },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"200 OK\", () => pm.response.to.have.status(200));",
-                  "pm.test(\"updated title\", () => pm.expect(pm.response.json().title).to.eql(\"DDIA revised\"));"
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "name": "DELETE /books/{id} — delete",
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/books/{{book_id}}",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "books",
-                "{{book_id}}"
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                "pm.test('Title updated', () => pm.expect(pm.response.json().title).to.eql('DDIA revised'));"
               ]
             }
+          }]
+        },
+        {
+          "name": "DELETE /books/{id}",
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/books/{{book_id}}"
           },
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "type": "text/javascript",
-                "exec": [
-                  "pm.test(\"204 No Content\", () => pm.response.to.have.status(204));",
-                  "pm.test(\"empty body\", () => pm.expect(pm.response.text()).to.eql(\"\"));"
-                ]
-              }
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Status 204', () => pm.response.to.have.status(204));",
+                "pm.test('Response body is empty', () => pm.expect(pm.response.text()).to.eql(''));"
+              ]
             }
-          ]
+          }]
+        }
+      ]
+    },
+    {
+      "name": "error-cases",
+      "item": [
+        {
+          "name": "POST /books - missing title",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"author\":\"Kleppmann\",\"year\":2017}"
+            },
+            "url": "{{base_url}}/books"
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Status 400', () => pm.response.to.have.status(400));",
+                "pm.test('Validation error identifies title', () => { const b = pm.response.json(); pm.expect(b.code).to.eql('VALIDATION_ERROR'); pm.expect(b.errors.some(e => e.field === 'title')).to.eql(true); });"
+              ]
+            }
+          }]
+        },
+        {
+          "name": "GET /books/9999 - not found",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/books/9999"
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Status 404', () => pm.response.to.have.status(404));",
+                "pm.test('Not found error body', () => { const b = pm.response.json(); pm.expect(b.code).to.eql('NOT_FOUND'); pm.expect(b.message).to.eql('Book not found'); });"
+              ]
+            }
+          }]
         }
       ]
     }
