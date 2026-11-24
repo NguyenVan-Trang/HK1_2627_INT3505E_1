@@ -17,9 +17,9 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status: {type: string}
+                # type: object
+                # properties:
+                #   status: {type: string}
   /books:
     get:
       # LAB 2 intentional issue 1: operationId is missing.
