@@ -42,4 +42,19 @@ Kết quả trả về sẽ giống với v2 của Practice 1:
 
 ![invalid-version](images/invalid-version.png)
 
+# PRACTICE 3:
+
+## 1. Chạy server:
+![server-w9-p3](images/server-w9-p3.png)
+
+## 2. Kết quả khi gọi API trước/sau ngày Sunset:
+
+Trước ngày Sunset:
+
+![before-sunset](images/before-sunset.png)
+
+Sau ngày Sunset:
+
+![after-sunset](images/after-sunset.png)
+
 
